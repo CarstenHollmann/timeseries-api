@@ -94,7 +94,7 @@ public class ProxyDatasetDao<T extends DatasetEntity> extends DatasetDao<T> impl
             return dataset;
         }).forEach((dataset) -> {
             session.saveOrUpdate(dataset);
-            LOGGER.info("Mark dataset as deleted: " + dataset);
+            LOGGER.debug("Mark dataset as deleted: " + dataset);
         });
     }
 
@@ -102,7 +102,7 @@ public class ProxyDatasetDao<T extends DatasetEntity> extends DatasetDao<T> impl
         List<T> datasets = getDeletedMarkDatasets(service);
         datasets.forEach((dataset) -> {
             session.delete(dataset);
-            LOGGER.info("Delete dataset: " + dataset);
+            LOGGER.debug("Delete dataset: " + dataset);
         });
         session.flush();
     }
