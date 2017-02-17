@@ -30,6 +30,7 @@ package org.n52.proxy.db.da;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.HibernateException;
@@ -121,24 +122,50 @@ public class InsertRepository extends SessionAwareRepository {
 
     public synchronized void insertDataset(DatasetEntity dataset) {
         Session session = getSession();
+        Transaction transaction = null;
         try {
-            Transaction transaction = session.beginTransaction();
-
-            ProcedureEntity procedure = insertProcedure((ProcedureEntity)dataset.getProcedure(), session);
-            CategoryEntity category = insertCategory(dataset.getCategory(), session);
-            OfferingEntity offering = insertOffering(dataset.getOffering(), session);
-            FeatureEntity feature = insertFeature((FeatureEntity)dataset.getFeature(), session);
-            PhenomenonEntity phenomenon = insertPhenomenon(dataset.getPhenomenon(), session);
-
-            insertDataset(dataset, category, procedure, offering, feature, phenomenon, session);
-
+            transaction = session.beginTransaction();
+            insertDataset(dataset, session);
             session.flush();
             transaction.commit();
         } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             LOGGER.error("Error occured while saving dataset: ", e);
         } finally {
             returnSession(session);
         }
+    }
+
+    public synchronized void insertDatasets(List<DatasetEntity> datasets) {
+        Session session = getSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            for (DatasetEntity dataset : datasets) {
+                insertDataset(dataset, session);
+            }
+            session.flush();
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            LOGGER.error("Error occured while saving dataset: ", e);
+        } finally {
+            returnSession(session);
+        }
+    }
+
+    private void insertDataset(DatasetEntity dataset, Session session) {
+        ProcedureEntity procedure = insertProcedure((ProcedureEntity)dataset.getProcedure(), session);
+        CategoryEntity category = insertCategory(dataset.getCategory(), session);
+        OfferingEntity offering = insertOffering(dataset.getOffering(), session);
+        FeatureEntity feature = insertFeature((FeatureEntity)dataset.getFeature(), session);
+        PhenomenonEntity phenomenon = insertPhenomenon(dataset.getPhenomenon(), session);
+        insertDataset(dataset, category, procedure, offering, feature, phenomenon, session);
+        session.flush();
     }
 
     public synchronized void insertRelatedFeature(Collection<RelatedFeatureEntity> relatedFeatures) {
