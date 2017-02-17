@@ -34,6 +34,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.n52.series.db.beans.DatasetEntity;
+import org.n52.series.db.beans.MeasurementDatasetEntity;
 import org.n52.series.db.beans.ServiceEntity;
 import org.n52.series.db.beans.UnitEntity;
 import org.n52.series.db.dao.DatasetDao;
@@ -67,15 +68,48 @@ public class ProxyDatasetDao<T extends DatasetEntity> extends DatasetDao<T> impl
         DatasetEntity instance = getInstance(dataset);
         if (instance == null) {
             session.save(dataset);
-            LOGGER.info("Save dataset: " + dataset);
+            LOGGER.debug("Save dataset: " + dataset);
             session.flush();
             session.refresh(dataset);
         } else {
             instance.setDeleted(Boolean.FALSE);
+            updateSeriesWithFirstLatestValues(instance, dataset);
             session.update(instance);
-            LOGGER.info("Mark dataset as undeleted: " + instance);
+            LOGGER.debug("Mark dataset as undeleted: " + instance);
         }
         return dataset;
+    }
+
+    public void updateSeriesWithFirstLatestValues(DatasetEntity oldDataSet, T newDataSet) {
+        boolean minChanged = false;
+        boolean maxChanged = false;
+        if (oldDataSet.getFirstValueAt() == null ||
+                 (oldDataSet.getFirstValueAt() != null && oldDataSet.getFirstValueAt().after(
+                         newDataSet.getFirstValueAt()))) {
+            minChanged = true;
+            oldDataSet.setFirstValueAt(newDataSet.getFirstValueAt());
+        }
+        if (oldDataSet.getLastValueAt() == null ||
+                (oldDataSet.getLastValueAt() != null && oldDataSet.getLastValueAt().before(
+                        newDataSet.getLastValueAt()))) {
+            maxChanged = true;
+            oldDataSet.setLastValueAt(newDataSet.getLastValueAt());
+        }
+
+        if (newDataSet instanceof MeasurementDatasetEntity) {
+            if (minChanged) {
+                oldDataSet.setFirstValue(((MeasurementDatasetEntity) newDataSet).getFirstValue());
+            }
+            if (maxChanged) {
+                oldDataSet.setLastValue(((MeasurementDatasetEntity) newDataSet).getLastValue());
+            }
+            if (oldDataSet.getUnit() == null && newDataSet.getUnit() != null) {
+                // TODO check if both unit are equal. If not throw exception?
+                oldDataSet.setUnit(newDataSet.getUnit());
+            }
+        }
+        session.saveOrUpdate(oldDataSet);
+        session.flush();
     }
 
     public UnitEntity getOrInsertUnit(UnitEntity unit) {
