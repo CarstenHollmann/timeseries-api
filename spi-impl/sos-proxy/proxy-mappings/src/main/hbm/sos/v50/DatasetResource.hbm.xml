@@ -14,7 +14,7 @@
         <many-to-one class="OfferingEntity" column="offeringid" name="offering" cascade="all" unique-key="datasetIdentifier"/>
         <many-to-one class="PhenomenonEntity" column="observablepropertyid" name="phenomenon" cascade="all" unique-key="datasetIdentifier"/>
         <many-to-one class="FeatureEntity" column="featureofinterestid" name="feature" cascade="all" unique-key="datasetIdentifier"/>
-        <many-to-one class="PlatformEntity" column="platformId" insert="false" name="platform" update="false" foreign-key="platformFk"/>
+        <many-to-one class="PlatformEntity" column="procedureid" insert="false" name="platform" update="false" foreign-key="platformFk"/>
         <property column="published" name="published" type="org.hibernate.type.TrueFalseType"/>
         <property column="deleted" name="deleted" type="org.hibernate.type.TrueFalseType"/>
         <property column="seriesType" name="datasetType" type="string" insert="false" update="false"/>
