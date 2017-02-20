@@ -61,7 +61,7 @@ public class ProxyFeatureDao extends FeatureDao implements InsertDao<FeatureEnti
     @Override
     public void clearUnusedForService(ServiceEntity service) {
         Criteria criteria = session.createCriteria(getEntityClass())
-                .add(Restrictions.eq("service.pkid", service.getPkid()))
+                .add(Restrictions.eq(COLUMN_SERVICE_PKID, service.getPkid()))
                 .add(Subqueries.propertyNotIn("pkid", createDetachedDatasetFilter()));
         criteria.list().forEach(entry -> {
             session.delete(entry);
@@ -70,7 +70,7 @@ public class ProxyFeatureDao extends FeatureDao implements InsertDao<FeatureEnti
 
     private FeatureEntity getInstance(FeatureEntity feature) {
         Criteria criteria = session.createCriteria(getEntityClass())
-                .add(Restrictions.eq(COLUMN_NAME, feature.getName()))
+                .add(Restrictions.eq(FeatureEntity.DOMAIN_ID, feature.getName()))
                 .add(Restrictions.eq(COLUMN_SERVICE_PKID, feature.getService().getPkid()));
         return (FeatureEntity) criteria.uniqueResult();
     }

@@ -70,7 +70,7 @@ public class ProxyPhenomenonDao extends PhenomenonDao implements InsertDao<Pheno
 
     private PhenomenonEntity getInstance(PhenomenonEntity phenomenon) {
         Criteria criteria = session.createCriteria(getEntityClass())
-                .add(Restrictions.eq(COLUMN_NAME, phenomenon.getName()))
+                .add(Restrictions.eq(PhenomenonEntity.DOMAIN_ID, phenomenon.getName()))
                 .add(Restrictions.eq(COLUMN_SERVICE_PKID, phenomenon.getService().getPkid()));
         return (PhenomenonEntity) criteria.uniqueResult();
     }

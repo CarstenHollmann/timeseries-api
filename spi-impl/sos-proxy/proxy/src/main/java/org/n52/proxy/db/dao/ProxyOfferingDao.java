@@ -73,7 +73,7 @@ public class ProxyOfferingDao extends OfferingDao implements InsertDao<OfferingE
 
     private OfferingEntity getInstance(OfferingEntity offering) {
         Criteria criteria = session.createCriteria(getEntityClass())
-                .add(Restrictions.eq(OfferingEntity.NAME, offering.getName()))
+                .add(Restrictions.eq(OfferingEntity.DOMAIN_ID, offering.getName()))
                 .add(Restrictions.eq(COLUMN_SERVICE_PKID, offering.getService().getPkid()));
         return (OfferingEntity) criteria.uniqueResult();
     }
