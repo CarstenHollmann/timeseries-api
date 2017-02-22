@@ -80,7 +80,9 @@ public class ProxyRelatedFeatureDao extends AbstractDao<RelatedFeatureEntity> im
     public RelatedFeatureEntity getOrInsertInstance(RelatedFeatureEntity relatedFeature) {
         RelatedFeatureEntity instance = getInstance(relatedFeature);
         if (instance == null) {
-            this.session.save(relatedFeature);
+            session.save(relatedFeature);
+            session.flush();
+            session.refresh(relatedFeature);
             instance = relatedFeature;
         }
         return instance;

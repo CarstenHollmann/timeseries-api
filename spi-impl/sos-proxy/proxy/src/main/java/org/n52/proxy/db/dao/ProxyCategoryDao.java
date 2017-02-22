@@ -53,6 +53,8 @@ public class ProxyCategoryDao extends CategoryDao implements InsertDao<CategoryE
         CategoryEntity instance = getInstance(category);
         if (instance == null) {
             this.session.save(category);
+            session.flush();
+            session.refresh(category);
             instance = category;
         }
         return instance;
@@ -60,7 +62,7 @@ public class ProxyCategoryDao extends CategoryDao implements InsertDao<CategoryE
 
     private CategoryEntity getInstance(CategoryEntity category) {
         Criteria criteria = session.createCriteria(getEntityClass())
-                .add(Restrictions.eq(CategoryEntity.DOMAIN_ID, category.getName()))
+                .add(Restrictions.eq(CategoryEntity.DOMAIN_ID, category.getDomainId()))
                 .add(Restrictions.eq(COLUMN_SERVICE_PKID, category.getService().getPkid()));
         return (CategoryEntity) criteria.uniqueResult();
     }

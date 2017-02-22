@@ -33,6 +33,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.n52.proxy.db.beans.RelatedFeatureRoleEntity;
 import org.n52.series.db.DataAccessException;
 import org.n52.series.db.beans.ServiceEntity;
@@ -70,11 +71,13 @@ public class ProxyRelatedFeatureRoleDao extends AbstractDao<RelatedFeatureRoleEn
     }
 
     @Override
-    public RelatedFeatureRoleEntity getOrInsertInstance(RelatedFeatureRoleEntity relatedFeature) {
-        RelatedFeatureRoleEntity instance = getInstance(relatedFeature);
+    public RelatedFeatureRoleEntity getOrInsertInstance(RelatedFeatureRoleEntity relatedFeatureRole) {
+        RelatedFeatureRoleEntity instance = getInstance(relatedFeatureRole);
         if (instance == null) {
-            this.session.save(relatedFeature);
-            instance = relatedFeature;
+            session.save(relatedFeatureRole);
+            session.flush();
+            session.refresh(relatedFeatureRole);
+            instance = relatedFeatureRole;
         }
         return instance;
     }
@@ -84,8 +87,9 @@ public class ProxyRelatedFeatureRoleDao extends AbstractDao<RelatedFeatureRoleEn
         // nothing to do
     }
 
-    private RelatedFeatureRoleEntity getInstance(RelatedFeatureRoleEntity relatedFeature) {
-        Criteria criteria = session.createCriteria(getEntityClass());;
+    private RelatedFeatureRoleEntity getInstance(RelatedFeatureRoleEntity relatedFeatureRole) {
+        Criteria criteria = session.createCriteria(getEntityClass());
+        criteria.add(Restrictions.eq("relatedFeatureRole", relatedFeatureRole.getRelatedFeatureRole()));
         return (RelatedFeatureRoleEntity) criteria.uniqueResult();
     }
 

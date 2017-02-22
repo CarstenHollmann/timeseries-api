@@ -52,7 +52,9 @@ public class ProxyPhenomenonDao extends PhenomenonDao implements InsertDao<Pheno
     public PhenomenonEntity getOrInsertInstance(PhenomenonEntity phenomenon) {
         PhenomenonEntity instance = getInstance(phenomenon);
         if (instance == null) {
-            this.session.save(phenomenon);
+            session.save(phenomenon);
+            session.flush();
+            session.refresh(phenomenon);
             instance = phenomenon;
         }
         return instance;
@@ -70,7 +72,7 @@ public class ProxyPhenomenonDao extends PhenomenonDao implements InsertDao<Pheno
 
     private PhenomenonEntity getInstance(PhenomenonEntity phenomenon) {
         Criteria criteria = session.createCriteria(getEntityClass())
-                .add(Restrictions.eq(PhenomenonEntity.DOMAIN_ID, phenomenon.getName()))
+                .add(Restrictions.eq(PhenomenonEntity.DOMAIN_ID, phenomenon.getDomainId()))
                 .add(Restrictions.eq(COLUMN_SERVICE_PKID, phenomenon.getService().getPkid()));
         return (PhenomenonEntity) criteria.uniqueResult();
     }

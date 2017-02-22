@@ -53,7 +53,9 @@ public class ProxyServiceDao extends ServiceDao implements InsertDao<ServiceEnti
     public ServiceEntity getOrInsertInstance(ServiceEntity service) {
         ServiceEntity instance = getInstance(service);
         if (instance == null) {
-            this.session.save(service);
+            session.save(service);
+            session.flush();
+            session.refresh(service);
             LOGGER.debug("Save service: " + service);
             instance = service;
         }

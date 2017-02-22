@@ -75,6 +75,8 @@ public class ProxyDatasetDao<T extends DatasetEntity> extends DatasetDao<T> impl
             instance.setDeleted(Boolean.FALSE);
             updateSeriesWithFirstLatestValues(instance, dataset);
             session.update(instance);
+            session.flush();
+            session.refresh(instance);
             LOGGER.debug("Mark dataset as undeleted: " + instance);
         }
         return dataset;

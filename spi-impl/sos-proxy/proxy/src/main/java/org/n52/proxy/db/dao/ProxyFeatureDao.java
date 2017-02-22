@@ -52,7 +52,9 @@ public class ProxyFeatureDao extends FeatureDao implements InsertDao<FeatureEnti
     public FeatureEntity getOrInsertInstance(FeatureEntity feature) {
         FeatureEntity instance = getInstance(feature);
         if (instance == null) {
-            this.session.save(feature);
+            session.save(feature);
+            session.flush();
+            session.refresh(feature);
             instance = feature;
         }
         return instance;
@@ -70,7 +72,7 @@ public class ProxyFeatureDao extends FeatureDao implements InsertDao<FeatureEnti
 
     private FeatureEntity getInstance(FeatureEntity feature) {
         Criteria criteria = session.createCriteria(getEntityClass())
-                .add(Restrictions.eq(FeatureEntity.DOMAIN_ID, feature.getName()))
+                .add(Restrictions.eq(FeatureEntity.DOMAIN_ID, feature.getDomainId()))
                 .add(Restrictions.eq(COLUMN_SERVICE_PKID, feature.getService().getPkid()));
         return (FeatureEntity) criteria.uniqueResult();
     }

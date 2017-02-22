@@ -52,7 +52,9 @@ public class ProxyProcedureDao extends ProcedureDao implements InsertDao<Procedu
     public ProcedureEntity getOrInsertInstance(ProcedureEntity procedure) {
         ProcedureEntity instance = getInstance(procedure);
         if (instance == null) {
-            this.session.save(procedure);
+            session.save(procedure);
+            session.flush();
+            session.refresh(procedure);
             instance = procedure;
         }
         return instance;
@@ -70,7 +72,7 @@ public class ProxyProcedureDao extends ProcedureDao implements InsertDao<Procedu
 
     private ProcedureEntity getInstance(ProcedureEntity procedure) {
         Criteria criteria = session.createCriteria(getEntityClass())
-                .add(Restrictions.eq(ProcedureEntity.DOMAIN_ID, procedure.getName()))
+                .add(Restrictions.eq(ProcedureEntity.DOMAIN_ID, procedure.getDomainId()))
                 .add(Restrictions.eq(COLUMN_SERVICE_PKID, procedure.getService().getPkid()));
         return (ProcedureEntity) criteria.uniqueResult();
     }

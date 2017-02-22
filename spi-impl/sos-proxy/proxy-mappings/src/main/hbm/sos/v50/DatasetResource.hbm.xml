@@ -9,11 +9,11 @@
             </generator>
         </id>
         <discriminator column="seriesType" force="true" type="string"/>
-        <many-to-one class="CategoryEntity" column="categoryid" name="category" cascade="all" unique-key="datasetIdentifier"/>
-        <many-to-one class="ProcedureEntity" column="procedureid" name="procedure" cascade="all" unique-key="datasetIdentifier"/>
-        <many-to-one class="OfferingEntity" column="offeringid" name="offering" cascade="all" unique-key="datasetIdentifier"/>
-        <many-to-one class="PhenomenonEntity" column="observablepropertyid" name="phenomenon" cascade="all" unique-key="datasetIdentifier"/>
-        <many-to-one class="FeatureEntity" column="featureofinterestid" name="feature" cascade="all" unique-key="datasetIdentifier"/>
+        <many-to-one class="CategoryEntity" column="categoryid" name="category" unique-key="datasetIdentifier"/>
+        <many-to-one class="ProcedureEntity" column="procedureid" name="procedure" unique-key="datasetIdentifier"/>
+        <many-to-one class="OfferingEntity" column="offeringid" name="offering" unique-key="datasetIdentifier"/>
+        <many-to-one class="PhenomenonEntity" column="observablepropertyid" name="phenomenon" unique-key="datasetIdentifier"/>
+        <many-to-one class="FeatureEntity" column="featureofinterestid" name="feature" unique-key="datasetIdentifier"/>
         <many-to-one class="PlatformEntity" column="procedureid" insert="false" name="platform" update="false" foreign-key="platformFk"/>
         <property column="published" name="published" type="org.hibernate.type.TrueFalseType"/>
         <property column="deleted" name="deleted" type="org.hibernate.type.TrueFalseType"/>
