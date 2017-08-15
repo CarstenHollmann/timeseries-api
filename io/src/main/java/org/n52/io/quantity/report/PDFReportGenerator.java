@@ -59,7 +59,7 @@ import org.n52.io.quantity.img.ChartIoHandler;
 import org.n52.io.request.RequestParameterSet;
 import org.n52.io.response.dataset.DataCollection;
 import org.n52.io.response.dataset.DatasetOutput;
-import org.n52.io.response.dataset.DatasetParameters;
+import org.n52.io.response.dataset.SeriesParameters;
 import org.n52.io.response.dataset.TimeseriesMetadataOutput;
 import org.n52.io.response.dataset.quantity.QuantityData;
 import org.n52.io.response.dataset.quantity.QuantityValue;
@@ -195,7 +195,7 @@ public class PDFReportGenerator extends ReportGenerator<QuantityData> {
         DocumentStructureType report = document.getDocumentStructure();
         TimeSeries timeseries = report.addNewTimeSeries();
 
-        DatasetParameters parameters = output.getDatasetParameters();
+        SeriesParameters parameters = output.getSeriesParameters();
         timeseries.setFeatureOfInterestID(parameters.getFeature().getLabel());
         timeseries.setPhenomenID(parameters.getPhenomenon().getLabel());
         timeseries.setProcedureID(parameters.getProcedure().getLabel());
@@ -244,7 +244,7 @@ public class PDFReportGenerator extends ReportGenerator<QuantityData> {
     }
 
     private String createValueTableHeader(TimeseriesMetadataOutput metadata) {
-        DatasetParameters parameters = metadata.getDatasetParameters();
+        SeriesParameters parameters = metadata.getSeriesParameters();
         String phenomenon = parameters.getPhenomenon().getLabel();
         return phenomenon + " (" + metadata.getUom() + ")";
     }

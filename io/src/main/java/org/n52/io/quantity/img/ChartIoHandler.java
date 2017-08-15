@@ -71,7 +71,7 @@ import org.n52.io.request.StyleProperties;
 import org.n52.io.response.ParameterOutput;
 import org.n52.io.response.dataset.DataCollection;
 import org.n52.io.response.dataset.DatasetOutput;
-import org.n52.io.response.dataset.DatasetParameters;
+import org.n52.io.response.dataset.SeriesParameters;
 import org.n52.io.response.dataset.quantity.QuantityData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -252,7 +252,7 @@ public abstract class ChartIoHandler extends IoHandler<QuantityData> {
     }
 
     protected String createRangeLabel(DatasetOutput output) {
-        DatasetParameters parameters = output.getDatasetParameters();
+        SeriesParameters parameters = output.getSeriesParameters();
         ParameterOutput phenomenon = parameters.getPhenomenon();
         StringBuilder uom = new StringBuilder();
         uom.append(phenomenon.getLabel());
@@ -293,7 +293,7 @@ public abstract class ChartIoHandler extends IoHandler<QuantityData> {
     }
 
     protected String formatTitle(DatasetOutput metadata, String title) {
-        DatasetParameters parameters = metadata.getDatasetParameters();
+        SeriesParameters parameters = metadata.getSeriesParameters();
         Object[] varargs = {
             // index important to reference in config!
             parameters.getPlatform()

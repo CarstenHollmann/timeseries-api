@@ -130,17 +130,17 @@ public class TimeseriesMetadataOutput extends QuantityDatasetOutput {
 
     @Override
     @JsonProperty("parameters")
-    public DatasetParameters getDatasetParameters() {
-        return new AdaptedSeriesParameters(super.getDatasetParameters());
+    public SeriesParameters getSeriesParameters() {
+        return new AdaptedSeriesParameters(super.getSeriesParameters());
     }
 
-    private static class AdaptedSeriesParameters extends DatasetParameters {
+    private static class AdaptedSeriesParameters extends SeriesParameters {
 
-        private final DatasetParameters parameters;
+        private final SeriesParameters parameters;
 
-        AdaptedSeriesParameters(DatasetParameters parameters) {
+        AdaptedSeriesParameters(SeriesParameters parameters) {
             this.parameters = parameters == null
-                    ? new DatasetParameters()
+                    ? new SeriesParameters()
                     : parameters;
         }
 

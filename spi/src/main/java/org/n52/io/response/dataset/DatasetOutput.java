@@ -41,7 +41,7 @@ public abstract class DatasetOutput<V extends AbstractValue<?>, R extends Refere
 
     private String platformType;
 
-    private DatasetParameters datasetParameters;
+    private SeriesParameters datasetParameters;
 
     private Set<String> rawFormats;
 
@@ -78,11 +78,11 @@ public abstract class DatasetOutput<V extends AbstractValue<?>, R extends Refere
         this.platformType = platformType;
     }
 
-    public DatasetParameters getDatasetParameters() {
+    public SeriesParameters getSeriesParameters() {
         return datasetParameters;
     }
 
-    public void setDatasetParameters(DatasetParameters parameters) {
+    public void setSeriesParameters(SeriesParameters parameters) {
         this.datasetParameters = parameters;
     }
 
