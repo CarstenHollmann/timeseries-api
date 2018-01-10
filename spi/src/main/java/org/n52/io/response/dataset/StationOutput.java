@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2013-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,7 +26,6 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-
 package org.n52.io.response.dataset;
 
 import java.util.HashMap;
@@ -49,7 +48,7 @@ import com.vividsolutions.jts.geom.Geometry;
 @JsonSerialize(using = FeatureOutputSerializer.class, as = GeoJSONObject.class)
 public class StationOutput extends AbstractOutput implements GeoJSONFeature {
 
-    public static final String TIMESERIES = "timeseries";
+    public static final String PROPERTIES = "properties";
     public static final String GEOMETRY = "geometry";
 
     private OptionalOutput<Map<String, DatasetParameters>> timeseries;
@@ -81,16 +80,12 @@ public class StationOutput extends AbstractOutput implements GeoJSONFeature {
 
     @Override
     public Map<String, Object> getProperties() {
-
-        // XXX how to apply OptionalOutput here?
-
         Map<String, Object> properties = new HashMap<>();
-        nullSafePut("id", getId(), properties);
         nullSafePut("label", getLabel(), properties);
         nullSafePut("domainId", getDomainId(), properties);
         nullSafePut("href", getHref(), properties);
         nullSafePut("rawFormats", getRawFormats(), properties);
-        nullSafePut(TIMESERIES, getTimeseries(), properties);
+        nullSafePut("timeseries", getTimeseries(), properties);
         return properties;
     }
 
