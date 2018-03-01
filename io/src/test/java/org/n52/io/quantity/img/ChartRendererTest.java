@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 52°North Initiative for Geospatial Open Source
+ * Copyright (C) 2013-2018 52°North Initiative for Geospatial Open Source
  * Software GmbH
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,7 +26,6 @@
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
-
 package org.n52.io.quantity.img;
 
 import java.util.Date;
@@ -111,6 +110,8 @@ public class ChartRendererTest {
     public void shouldPrintExplicitlySetOutputTimezoneInDomainAxisLabel() {
         IoParameters config = IoParameters.createDefaults()
                                           .removeAllOf("outputTimezone")
+                                          .removeAllOf("timespan")
+                                          .extendWith("timespan", "PT24H/2017-07-01TZ")
                                           .extendWith("outputTimezone", "America/Los_Angeles");
         IoStyleContext context = IoStyleContext.create(config);
         String label = new MyChartRenderer(context).getXYPlot()
