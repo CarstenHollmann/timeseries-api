@@ -54,8 +54,8 @@ public class RequestUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestUtils.class);
 
     public static IoParameters overrideQueryLocaleWhenSet(String locale, IoParameters query) {
-        return locale != null
-                ? query.replaceWith(Parameters.LOCALE, locale)
+        return locale != null && !locale.isEmpty()
+                ? query.replaceWith(Parameters.LOCALE, locale.split(",")[0])
                 : query;
     }
 
